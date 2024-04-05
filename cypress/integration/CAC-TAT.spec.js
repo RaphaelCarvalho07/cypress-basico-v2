@@ -48,16 +48,16 @@ describe("Central de Atendimento ao Cliente TAT", () => {
     cy.get(".error")
       .should("not.be.visible")
   });
-  
-Cypress._.times(3, () => {
-  it("valida que o campo telefone só aceita números", () => {
-    cy.get('input[name="firstName"]').type("Koi");
-    cy.get("#lastName").type("Targaryen");
-    cy.get('input[type="email"]').type("koi@targryen.com");
-    cy.get("#phone").type("abc");
-    cy.get('input[type="number"]').should("not.have.value");
-  });
-})
+
+  Cypress._.times(3, () => {
+    it("valida que o campo telefone só aceita números", () => {
+      cy.get('input[name="firstName"]').type("Koi");
+      cy.get("#lastName").type("Targaryen");
+      cy.get('input[type="email"]').type("koi@targryen.com");
+      cy.get("#phone").type("abc");
+      cy.get('input[type="number"]').should("not.have.value");
+    });
+  })
   it("exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário", () => {
     cy.clock();
     cy.get('input[name="firstName"]').type("Koi");
@@ -201,7 +201,7 @@ Cypress._.times(3, () => {
     cy.contains('Talking About Testing').should('be.visible')
   })
 
-  it.only('exibe e esconde as mensagens de sucesso e erro usando o .invoke', () => {
+  it('exibe e esconde as mensagens de sucesso e erro usando o .invoke', () => {
     cy.get('.success')
       .should('not.be.visible')
       .invoke('show')
@@ -216,5 +216,31 @@ Cypress._.times(3, () => {
       .and('contain', 'Valide os campos obrigatórios!')
       .invoke('hide')
       .should('not.be.visible')
+  })
+
+  it('preenche a area de texto usando o comando invoke', () => {
+    const longText = Cypress._.repeat('0123456789', 20)
+    cy.get('#open-text-area')
+      .invoke('val', longText)
+      .should('have.value', longText)
+  })
+
+  it('faz uma requisição HTTP', () => {
+    cy.request('https://cac-tat.s3.eu-central-1.amazonaws.com/index.html').should((res) => {
+      const { status, statusText, body } = res
+      expect(status).to.eq(200)
+      expect(statusText).eq('OK')
+      expect(body).to.include('CAC TAT')
+    })
+  })
+
+  it.only('encontre o gato escondido', () => {
+    cy.get('#cat')
+      .invoke('show')
+      .should('be.visible')
+    cy.get('#title')
+      .invoke('text', 'CAT TAT')
+      cy.get('#subtitle')
+      .invoke('text', 'Central de Atendimento ao Gato 💚')
   })
 });
