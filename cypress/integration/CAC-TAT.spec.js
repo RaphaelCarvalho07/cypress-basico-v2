@@ -48,6 +48,8 @@ describe("Central de Atendimento ao Cliente TAT", () => {
       .should("not.be.visible")
   });
 
+  
+Cypress._.times(3, () => {
   it("valida que o campo telefone só aceita números", () => {
     cy.get('input[name="firstName"]').type("Koi");
     cy.get("#lastName").type("Targaryen");
@@ -55,7 +57,7 @@ describe("Central de Atendimento ao Cliente TAT", () => {
     cy.get("#phone").type("abc");
     cy.get('input[type="number"]').should("not.have.value");
   });
-
+})
   it("exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário", () => {
     cy.clock();
     cy.get('input[name="firstName"]').type("Koi");
